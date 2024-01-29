@@ -28,3 +28,15 @@ Content-Type: application/json
 POST {{baseUrl}}/questions
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
+
+{
+	"title": "question2",
+	"content": "can i ask 2question"
+}
+
+###
+
+# @name list questions
+GET {{baseUrl}}/questions?page=1
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
