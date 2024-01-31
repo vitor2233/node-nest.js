@@ -1,4 +1,4 @@
-import { Get, Query, UseGuards } from "@nestjs/common";
+import { BadRequestException, Get, Query, UseGuards } from "@nestjs/common";
 import { Controller } from "@nestjs/common";
 import { JwtAuthGuard } from "@/infra/auth/jwt-auth.guard";
 import { ZodValidationPipe } from "@/infra/http/pipes/zod-validation-pipe";
@@ -28,8 +28,9 @@ export class FetchRecentQuestionsController {
         const result = await this.fetchRecentQuestions.execute({ page })
 
         if (result.isLeft()) {
-            throw new Error()
+            throw new BadRequestException()
         }
+
         const questions = result.value.questions
 
         return { questions: questions.map(QuestionPresenter.toHTTP) }
