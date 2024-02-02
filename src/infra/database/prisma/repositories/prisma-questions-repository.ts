@@ -27,10 +27,12 @@ export class PrismaQuestionsRepository implements QuestionsRepository {
         const question = await this.prisma.question.findUnique({
             where: {
                 slug,
-            }
+            },
         })
 
-        if (!question) return null
+        if (!question) {
+            return null
+        }
 
         return PrismaQuestionMapper.toDomain(question)
     }

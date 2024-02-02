@@ -7,7 +7,7 @@ Content-Type: application/json
 
 {
     "name": "vitor",
-	"email": "vitor3@email.com",
+	"email": "vitor1@email.com",
 	"password": "12345"
 }
 
@@ -18,7 +18,7 @@ POST {{baseUrl}}/sessions
 Content-Type: application/json
 
 {
-	"email": "vitor3@email.com",
+	"email": "vitor1@email.com",
 	"password": "12345"
 }
 
@@ -30,8 +30,8 @@ Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
 {
-	"title": "question3",
-	"content": "can i ask 3question"
+	"title": "question3243",
+	"content": "can i ask 323question"
 }
 
 ###
