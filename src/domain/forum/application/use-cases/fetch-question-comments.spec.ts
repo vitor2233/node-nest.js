@@ -1,6 +1,3 @@
-import { InMemoryAnswersRepository } from 'test/repositories/in-memory-answers-repository'
-import { FetchQuestionAnswersUseCaseCase } from './fetch-question-answers'
-import { makeAnswer } from 'test/factories/make-answer'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { InMemoryQuestionCommentsRepository } from 'test/repositories/in-memory-question-comments-repository'
 import { FetchQuestionCommentsUseCaseCase } from './fetch-question-comments'
