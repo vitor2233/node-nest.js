@@ -10,7 +10,7 @@ interface FetchRecentQuestionsUseCaseCaseRequest {
 type FetchRecentQuestionsUseCaseCaseResponse = Either<null, { questions: Question[] }>
 
 @Injectable()
-export class FetchRecentQuestionsUseCaseCase {
+export class FetchRecentQuestionsUseCase {
     constructor(
         private questionsRepository: QuestionsRepository,
     ) { }
