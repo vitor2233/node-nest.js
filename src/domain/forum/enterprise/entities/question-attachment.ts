@@ -6,7 +6,7 @@ export interface QuestionAttachmentProps {
     attachmentId: UniqueEntityID
 }
 
-export class QuestionAttachment extends Entity<QuestionAttachmentProps>{
+export class QuestionAttachment extends Entity<QuestionAttachmentProps> {
     get questionId() {
         return this.props.questionId
     }

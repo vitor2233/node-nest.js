@@ -9,35 +9,78 @@ import { QuestionBestAnswerChosenEvent } from './events/question-best-answer-cho
 export interface QuestionProps {
     authorId: UniqueEntityID
     bestAnswerId?: UniqueEntityID | null
-    attachments: QuestionAttachmentList
     title: string
     content: string
     slug: Slug
+    attachments: QuestionAttachmentList
     createdAt: Date
     updatedAt?: Date | null
 }
+
 export class Question extends AggregateRoot<QuestionProps> {
     get authorId() {
         return this.props.authorId
     }
+
     get bestAnswerId() {
         return this.props.bestAnswerId
     }
-    get attachments() {
-        return this.props.attachments
+
+    set bestAnswerId(bestAnswerId: UniqueEntityID | undefined | null) {
+        if (bestAnswerId === undefined || bestAnswerId === null) {
+            return
+        }
+
+        if (
+            this.props.bestAnswerId === undefined ||
+            this.props.bestAnswerId === null ||
+            !bestAnswerId.equals(this.props.bestAnswerId)
+        ) {
+            this.addDomainEvent(new QuestionBestAnswerChosenEvent(this, bestAnswerId))
+        }
+
+        this.props.bestAnswerId = bestAnswerId
+
+        this.touch()
     }
+
     get title() {
         return this.props.title
     }
+
+    set title(title: string) {
+        this.props.title = title
+        this.props.slug = Slug.createFromText(title)
+
+        this.touch()
+    }
+
     get content() {
         return this.props.content
     }
+
+    set content(content: string) {
+        this.props.content = content
+        this.touch()
+    }
+
     get slug() {
         return this.props.slug
     }
+
+    get attachments() {
+        return this.props.attachments
+    }
+
+    set attachments(attachments: QuestionAttachmentList) {
+        this.props.attachments = attachments
+        this.touch()
+    }
+
     get createdAt() {
         return this.props.createdAt
     }
+
     get updatedAt() {
         return this.props.updatedAt
     }
@@ -54,37 +97,19 @@ export class Question extends AggregateRoot<QuestionProps> {
         this.props.updatedAt = new Date()
     }
 
-    set title(title: string) {
-        this.props.title = title
-        this.props.slug = Slug.createFromText(title)
-        this.touch()
-    }
-
-    set content(content: string) {
-        this.props.content = content
-        this.touch()
-    }
-
-    set bestAnswerId(bestAnswerId: UniqueEntityID | undefined | null) {
-        if (bestAnswerId && bestAnswerId != this.props.bestAnswerId) {
-            this.addDomainEvent(new QuestionBestAnswerChosenEvent(this, bestAnswerId))
-        }
-        this.props.bestAnswerId = bestAnswerId
-        this.touch()
-    }
-
-    set attachments(attachments: QuestionAttachmentList) {
-        this.props.attachments = attachments
-        this.touch()
-    }
-
-    static create(props: Optional<QuestionProps, 'createdAt' | 'slug' | 'attachments'>, id?: UniqueEntityID) {
-        const question = new Question({
-            ...props,
-            slug: props.slug ?? Slug.createFromText(props.title),
-            attachments: props.attachments ?? new QuestionAttachmentList(),
-            createdAt: props.createdAt ?? new Date(),
-        }, id)
+    static create(
+        props: Optional<QuestionProps, 'createdAt' | 'slug' | 'attachments'>,
+        id?: UniqueEntityID,
+    ) {
+        const question = new Question(
+            {
+                ...props,
+                slug: props.slug ?? Slug.createFromText(props.title),
+                attachments: props.attachments ?? new QuestionAttachmentList(),
+                createdAt: props.createdAt ?? new Date(),
+            },
+            id,
+        )
 
         return question
     }
