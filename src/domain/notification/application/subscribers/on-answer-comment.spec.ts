@@ -6,12 +6,13 @@ import { InMemoryNotificationsRepository } from "test/repositories/in-memory-not
 
 import { MockInstance } from "vitest"
 import { waitFor } from "test/utils/wait-for"
-import { OnQuestionBestAnswerChosen } from "./on-question-best-answer-chosen"
 import { makeAnswerComment } from "test/factories/make-answer-comment"
 import { InMemoryAnswerCommentsRepository } from "test/repositories/in-memory-answer-comments-repository"
 import { OnAnswerComment } from "./on-answer-comment"
+import { InMemoryStudentsRepository } from "test/repositories/in-memory-students-repository"
 
 let inMemoryAnswersRepository: InMemoryAnswersRepository
+let inMemoryStudentsRepository: InMemoryStudentsRepository
 let inMemoryAnswerCommentsRepository: InMemoryAnswerCommentsRepository
 let inMemoryNotificationsRepository: InMemoryNotificationsRepository
 let inMemoryAnswerAttachmentsRepository: InMemoryAnswerAttachmentsRepository
@@ -21,7 +22,8 @@ let sendNotificationExecuteSpy: MockInstance<[SendNotificationUseCaseRequest], P
 
 describe('Answer Comment', () => {
     beforeEach(() => {
-        inMemoryAnswerCommentsRepository = new InMemoryAnswerCommentsRepository()
+        inMemoryStudentsRepository = new InMemoryStudentsRepository()
+        inMemoryAnswerCommentsRepository = new InMemoryAnswerCommentsRepository(inMemoryStudentsRepository)
         inMemoryAnswerAttachmentsRepository = new InMemoryAnswerAttachmentsRepository()
         inMemoryAnswersRepository = new InMemoryAnswersRepository(inMemoryAnswerAttachmentsRepository)
         inMemoryNotificationsRepository = new InMemoryNotificationsRepository()
