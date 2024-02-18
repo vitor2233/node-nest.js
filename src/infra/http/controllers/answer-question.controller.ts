@@ -7,7 +7,8 @@ import { z } from "zod";
 import { AnswerQuestionUseCase } from "@/domain/forum/application/use-cases/answer-question";
 
 const answerQuestionBodySchema = z.object({
-    content: z.string()
+    content: z.string(),
+    attachments: z.array(z.string().uuid()),
 })
 
 const bodyValidationPipe = new ZodValidationPipe(answerQuestionBodySchema)
@@ -25,14 +26,14 @@ export class AnswerQuestionController {
         @CurrentUser() user: UserPayload,
         @Param('questionId') questionId: string
     ) {
-        const { content } = body
+        const { content, attachments } = body
         const userId = user.sub
 
         const result = await this.answerQuestion.execute({
             questionId,
             content,
             authorId: userId,
-            attachmentsIds: []
+            attachmentsIds: attachments
         })
 
         if (result.isLeft()) {
